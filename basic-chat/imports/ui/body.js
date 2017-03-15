@@ -4,15 +4,14 @@ import { ReactiveDict } from 'meteor/reactive-dict';
 import { Session } from 'meteor/session';
 
 import { Tasks } from '../api/tasks.js'
-import { Users } from '../api/chatusers.js'
 import { Messages } from '../api/messages.js'
 import { Groups } from '../api/groups.js'
 
 import './task.js'
 import './message.js'
 import './group.js'
-import './chatuser.js'
 import './grouplist.js'
+import './messagelist.js'
 import './body.html';
 
 Template.body.onCreated(function bodyOnCreated(){
@@ -29,12 +28,6 @@ Template.body.helpers({
     }
     // Otherwise return all of the tasks
     return Tasks.find({}, { sort:{createdAt:-1} });
-  },
-  groups(){
-    return Groups.find({}, { sort:{createdAt:-1} });
-  },
-  messages(){
-    return Messages.find({}, { sort:{createdAt:-1} });
   },
   groupState(){
     return Session.get("State") == "Groups";
@@ -76,12 +69,14 @@ Template.body.events({
 
     // Insert a task into the Collection
     Messages.insert({
-      messagetext
+      messagetext,
+      group: Session.get("Group")
     });
     // Clear form
     target.value = '';
   },
   'click .show-groups'(event){
+    event.preventDefault();
     Session.set("State","Groups");
   },
 });

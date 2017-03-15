@@ -28,19 +28,10 @@
     </header>
 
     {{#if groupState}}
-    <ul>
-      {{#each groups}}
-        {{> group}}
-      {{/each}}
-    </ul>
+      {{> grouplist}}
     {{/if}}
-
     {{#if messageState}}
-    <ul>
-      {{#each messages}}
-        {{> message}}
-      {{/each}}
-    </ul>
+      {{> messagelist}}
     {{/if}}
 
   </div>
