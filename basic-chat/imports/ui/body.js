@@ -51,7 +51,8 @@ Template.body.events({
 
     // Insert a task into the Collection
     Groups.insert({
-      groupname
+      groupname,
+      owner: Meteor.userId()
     });
     // Clear form
     target.value = '';
@@ -70,7 +71,9 @@ Template.body.events({
     // Insert a task into the Collection
     Messages.insert({
       messagetext,
-      group: Session.get("Group")
+      group: Session.get("Group"),
+      owner: Meteor.userId(),
+      username: Meteor.user().username
     });
     // Clear form
     target.value = '';
