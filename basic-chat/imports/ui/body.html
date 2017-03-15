@@ -1,0 +1,47 @@
+<body>
+  <div class="container">
+    <header>
+      {{#if groupState}}
+        <h1>Todo List</h1>
+      {{/if}}
+      {{#if messageState}}
+        <h1>{{currentGroup}}</h1>
+      {{/if}}
+
+      {{> loginButtons}}
+
+      {{#if currentUser}}
+        {{#if groupState}}
+          <form name="groupform">
+            <input type="text" name="text" placeholder="Group Name" />
+            <button class="submit-group">Submit</button>
+          </form>
+        {{/if}}
+        {{#if messageState}}
+          <form name="messageform">
+            <input type="text" name="text" placeholder="Message" />
+            <button class="submit-message">Submit</button>
+            <button class="show-groups">Back</button>
+          </form>
+        {{/if}}
+      {{/if}}
+    </header>
+
+    {{#if groupState}}
+    <ul>
+      {{#each groups}}
+        {{> group}}
+      {{/each}}
+    </ul>
+    {{/if}}
+
+    {{#if messageState}}
+    <ul>
+      {{#each messages}}
+        {{> message}}
+      {{/each}}
+    </ul>
+    {{/if}}
+
+  </div>
+</body>
