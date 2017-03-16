@@ -9,9 +9,9 @@ import './messagelist.html';
 
 Template.messagelist.helpers({
   messages(){
-    return Messages.find({ group: Session.get("Group")}, { sort:{createdAt:-1} });
+    return Messages.find({ group: Session.get("Group")._id}, { sort:{createdAt:-1} });
   },
   users(){
-    return Groups.findOne({_id: Session.get("Group")}).users;
+    return Groups.findOne({_id: Session.get("Group")._id}).users;
   }
 });
