@@ -8,6 +8,9 @@ import { Messages} from '../api/messages.js';
 import './group.html';
 
 Template.group.events({
+  'click .superdelete'(){
+      Groups.remove(this._id);
+  },
   'click .delete'(){
     Groups.update({_id: this._id}, {$pull: {users: Meteor.userId()}});
     if (Groups.findOne({_id: this._id}.users.length == 0))

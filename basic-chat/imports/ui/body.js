@@ -42,15 +42,17 @@ Template.body.events({
     // Get value from form element
     const target = document.groupform.text;
     const groupname = target.value;
-
-    // Insert a group into the Collection
-    Groups.insert({
-      groupname,
-      owner: Meteor.userId(),
-      users: [Meteor.userId()]
-    });
-    // Clear form
-    target.value = '';
+    if(groupname.trim() != "")
+    {
+      // Insert a group into the Collection
+      Groups.insert({
+        groupname,
+        owner: Meteor.userId(),
+        users: [Meteor.userId()]
+      });
+      // Clear form
+      target.value = '';
+    }
   },
 
   'click .submit-message'(event){
@@ -60,16 +62,18 @@ Template.body.events({
     // Get value from form element
     const target = document.messageform.text;
     const messagetext = target.value;
-
-    // Insert a message into the Collection
-    Messages.insert({
-      messagetext,
-      group: Session.get("Group")._id,
-      owner: Meteor.userId(),
-      username: Meteor.user().username,
-    });
-    // Clear form
-    target.value = '';
+    if(messagetext.trim() != "")
+    {
+      // Insert a message into the Collection
+      Messages.insert({
+        messagetext,
+        group: Session.get("Group")._id,
+        owner: Meteor.userId(),
+        username: Meteor.user().username,
+      });
+      // Clear form
+      target.value = '';
+    }
   },
 
   'click .submit-member'(event){
