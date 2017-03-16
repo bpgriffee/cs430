@@ -2,7 +2,7 @@
   <div class="container">
     <header>
       {{#if groupState}}
-        <h1>Todo List</h1>
+        <h1>SaveMe</h1>
       {{/if}}
       {{#if messageState}}
         <h1>{{currentGroup}}</h1>
@@ -22,6 +22,10 @@
             <input type="text" name="text" placeholder="Message" />
             <button class="submit-message">Submit</button>
             <button class="show-groups">Back</button>
+          </form>
+          <form name="addmemberform">
+            <input type="text" name="text" placeholder="Username to Add" />
+            <button class="submit-member">Submit</button>
           </form>
         {{/if}}
       {{/if}}

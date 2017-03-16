@@ -14,6 +14,6 @@ Template.group.events({
     Session.set("State","Messages");
     group = Groups.findOne({_id: this._id}, {});
     name = group.groupname;
-    Session.set("Group",name);
+    Session.set("Group",this._id);
   },
 })
