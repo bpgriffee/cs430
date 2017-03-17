@@ -9,11 +9,14 @@ import './group.html';
 
 Template.group.events({
   'click .superdelete'(){
-      Groups.remove(this._id);
+      if (Groups.findOne({_id: this._id}).owner == Meteor.userId())
+      {
+        Groups.remove(this._id);
+      }
   },
   'click .delete'(){
     Groups.update({_id: this._id}, {$pull: {users: Meteor.userId()}});
-    if (Groups.findOne({_id: this._id}.users.length == 0))
+    if (Groups.findOne({_id: this._id}).users.length == 0)
     {
       Groups.remove(this._id);
     }
@@ -24,4 +27,10 @@ Template.group.events({
     name = group.groupname;
     Session.set("Group",this);
   },
+});
+
+Template.group.helpers({
+  current_user_is_owner(){
+    return Groups.findOne({_id: this._id}).owner == Meteor.userId();
+  }
 })

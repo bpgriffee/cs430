@@ -2,7 +2,9 @@
   <li>
     <span class="text"><strong>{{groupname}}</strong></span>
     <button class="open">Open</button>
-    <button class="superdelete">Delete</button>
+      {{#if current_user_is_owner}}
+      <button class="superdelete">Delete</button>
+      {{/if}}
     <button class="delete">Leave</button>
   </li>
 </template>
