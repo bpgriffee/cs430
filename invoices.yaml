@@ -1,0 +1,326 @@
+application:
+  title: SaveMe
+  theme: bootswatch-flatly
+  collections:
+    - name: groups
+      fields:
+        - name: groupNumber
+          title: Group Name
+          required: true
+          exportable: true
+      owner_field: ownerId
+      roles_allowed_to_read: []
+      roles_allowed_to_update:
+        - owner
+      roles_allowed_to_delete:
+        - owner
+    - name: group_members
+      fields:
+        - name: description
+          title: Description
+          required: true
+          exportable: true
+      owner_field: ownerId
+      roles_allowed_to_read:
+        - owner
+      roles_allowed_to_update:
+        - owner
+      roles_allowed_to_delete:
+        - owner
+    - name: group_messages
+      owner_field: createdBy
+      before_insert_code: >-
+        doc.name = Meteor.user() ? Meteor.user().profile.name : 'Anonymous';
+        return doc;
+      roles_allowed_to_read: []
+      roles_allowed_to_insert: []
+      roles_allowed_to_update:
+        - owner
+      roles_allowed_to_delete:
+        - owner
+  queries:
+    - name: group_list
+      collection: groups
+      filter: {}
+      options: '{ "sort": [[ "groupName", "desc"]] }'
+    - name: groups_empty
+      collection: groups
+      filter: '{ "_id": null }'
+      options: '{}'
+      find_one: true
+      related_queries:
+        - name: group_list
+    - name: group_details
+      collection: groups
+      filter: '{ "_id": ":groupId" }'
+      find_one: true
+    - name: group_members
+      collection: group_members
+      filter: '{ "groupId": ":groupId" }'
+    - name: group_members_empty
+      collection: group_members
+      filter: '{ "_id": null }'
+      find_one: true
+    - name: group_member
+      collection: group_members
+      filter: '{ "_id": ":groupId" }'
+      find_one: true
+    - name: messages
+      collection: group_messages
+      find_one: false
+      filter: '{"groupId": "groupId"}'
+      options: '{ "sort": { "createdAt": -1 } }'
+    - name: messages_empty
+      collection: group_messages
+      find_one: true
+      filter: '{ "_id": null }'
+      options: '{}'
+    - name: current_user_data
+      collection: users
+      filter: '{ "_id": "Meteor.userId()" }'
+      find_one: true
+  public_zone:
+    pages:
+      - name: home_public
+        title: ''
+        components:
+          - name: home_jumbotron
+            title: SaveMe!
+            type: jumbotron
+            text: >-
+              Welcome to SaveMe chat application!
+              A union of being social and being safe =)
+              <br>
+              Login and join a group to continue.
+            button_title: Continue &raquo;
+            button_route: login
+      - name: login
+        template: login
+      - name: register
+        template: register
+      - name: forgot_password
+        template: forgot_password
+      - name: reset_password
+        template: reset_password
+        route_params:
+          - resetPasswordToken
+    components:
+      - name: left_menu
+        type: menu
+        class: nav navbar-nav
+        dest_selector: '#menu'
+        items:
+          - title: Home
+            route: home_public
+      - name: right_menu
+        type: menu
+        class: nav navbar-nav navbar-right
+        dest_selector: '#menu'
+        items:
+          - title: Register
+            route: register
+          - title: Login
+            route: login
+  private_zone:
+    pages:
+      - name: home_private
+        title: 'Welcome {{userFullName}}!'
+        components:
+          - name: home_jumbotron
+            title: Groups
+            type: jumbotron
+            text: >-
+              Select a group to view messages
+            components:
+              - name: view
+                type: data_view
+                text_if_empty: 'Not in any groups :('
+                query_name: group_list
+                details_route: groups.group_messages
+                details_route_params:
+                  - name: groupId
+                    value: this._id
+      - name: groups
+        components:
+          - name: view
+            type: data_view
+            title: Groups
+            text_if_empty: 'No groups :('
+            query_name: group_list
+            insert_route: groups.insert
+            edit_route: groups.edit
+            edit_route_params:
+              - name: groupId
+                value: this._id
+            details_route: groups.details
+            details_route_params:
+              - name: groupId
+                value: this._id
+        pages:
+          - name: insert
+            components:
+              - name: insert_form
+                type: form
+                mode: insert
+                title: New Group
+                query_name: groups_empty
+                submit_route: groups.details
+                submit_route_params:
+                  - name: groupId
+                    value: result
+                cancel_route: groups
+          - name: details
+            template: page_subcontent_tabnav
+            route_params:
+              - groupId
+            components:
+              - name: details_form
+                type: form
+                mode: read_only
+                title: 'Member Manager'
+                layout: horizontal
+                query_name: group_details
+                back_route: groups
+            force_yield_subpages: true
+            pages:
+              - name: groups
+                components:
+                  - name: view
+                    type: data_view
+                    text_if_empty: No members
+                    query_name: group_members
+                    insert_button_title: Add members
+                    insert_route: groups.details.insert
+                    insert_route_params:
+                      - name: groupId
+                        value: this.params.groupId
+                    edit_route: groups.details.edit
+                    edit_route_params:
+                      - name: groupId
+                        value: UI._parentData(1).params.groupId
+                      - name: groupId
+                        value: this._id
+              - name: insert
+                components:
+                  - name: insert_form
+                    type: form
+                    mode: insert
+                    title: Add member
+                    query_name: group_members_empty
+                    hidden_fields:
+                      - name: groupId
+                        value: this.params.groupId
+                    submit_route: groups.details
+                    submit_route_params:
+                      - name: groupId
+                        value: this.params.groupId
+                    cancel_route: groups.details
+                    cancel_route_params:
+                      - name: groupId
+                        value: this.params.groupId
+              - name: edit
+                route_params:
+                  - groupId
+                components:
+                  - name: edit_form
+                    type: form
+                    mode: update
+                    title: Edit item
+                    query_name: group_member
+                    submit_route: groups.details
+                    submit_route_params:
+                      - name: groupId
+                        value: this.params.groupId
+                    cancel_route: groups.details
+                    cancel_route_params:
+                      - name: groupId
+                        value: this.params.groupId
+          - name: edit
+            route_params:
+              - groupId
+            components:
+              - name: edit_form
+                type: form
+                mode: update
+                title: Edit Group
+                submit_route: groups
+                cancel_route: groups
+                query_name: group_details
+          - name: group_messages
+            title: 'Group Things'
+            components:
+              - name: form
+                mode: insert
+                submit_route: messages
+                type: form
+                query_name: messages_empty
+                fields:
+                  - name: text
+                    title: 'Or enter a note:'
+                    type: string
+                    required: true
+                    input: textarea
+              - name: messages
+                html: "<template name=\"TEMPLATE_NAME\">\n  {{#each messages}}\n\t<div class=\"panel\" style=\"padding: 0 10px;\">\n      {{#if photo}}\n        <img src=\"{{photo}}\" alt=\"Loading image...\" style=\"margin-top: 10px; width: 100%; height: auto\">\n      {{else}}\n        <p>{{text}}</p>\n      {{/if}}\n      <p class=\"text-muted\">{{name}}, {{livestamp createdAt}}</p>\n    </div>\n  {{/each}}\n</template>"
+                type: custom_component
+                query_name: messages
+      - name: user_settings
+        pages:
+          - name: profile
+            components:
+              - name: edit_form
+                type: form
+                mode: update
+                title: Edit your profile
+                submit_route: user_settings.profile
+                query_name: current_user_data
+                fields:
+                  - name: profile.name
+                    title: Name
+                    required: true
+                  - name: profile.email
+                    title: E-mail
+                    type: email
+                    required: true
+                  - name: profile.facebook
+                    title: Facebook URL
+                  - name: profile.google
+                    title: Google+ URL
+                  - name: profile.twitter
+                    title: Twitter ID
+                  - name: profile.website
+                    title: Website URL
+          - name: change_pass
+            template: change_pass
+        components:
+          - name: side_menu
+            type: menu
+            class: nav nav-stacked nav-pills
+            items:
+              - title: Profile
+                route: user_settings.profile
+              - title: Change password
+                route: user_settings.change_pass
+      - name: logout
+        template: logout
+    components:
+      - name: left_menu
+        type: menu
+        class: nav navbar-nav
+        dest_selector: '#menu'
+        items:
+          - title: Home
+            route: home_private
+          - title: Groups
+            route: groups
+      - name: right_menu
+        type: menu
+        class: nav navbar-nav navbar-right
+        dest_selector: '#menu'
+        items:
+          - title: '{{userEmail}}'
+            items:
+              - title: Settings
+                route: user_settings
+              - title: Logout
+                route: logout
