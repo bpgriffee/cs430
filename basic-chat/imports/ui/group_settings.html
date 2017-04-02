@@ -1,13 +1,15 @@
 <template name="group_settings">
   <li>
-    <span class="text"><strong>Group Settings</strong></span>
-    <checkbox class="mute">Mute (NF)</checkbox>
-    <button class="leave_group">Leave Group (NF)</button>
+    <p><span class="text"><strong>Group Settings</strong></span></p>
+    <p><checkbox class="mute">Mute (NF)</checkbox></p>
+    <p><button class="leave-group">Leave Group (NF)</button></p>
     {{#if current_user_is_owner}}
-    <button class="add_admins">Add Admins (NF)</button>
-    <checkbox class="req_location">Require Location (NF)</checkbox>
-    <checkbox class="req_em_access">Require Emergency Access (NF)</checkbox>
-    <button class="remove_user">Remove User (NF)</button>
-    {{/if}}
+    <p><button class="add-admins">Add Admins (NF)</button></p>
+    <p><checkbox class="req-location">Require Location (NF)</checkbox></p>
+    <p><checkbox class="req-em-access">Require Emergency Access (NF)</checkbox></p>
+    <p><button class="remove-user">Remove User (NF)</button></p>
+    {{/if}} 
+    <p><button class="save-settings">Save Settings (NF)</button></p>
+    <p><button class="close-settings">Close Settings</button></p>
   </li>
 </template>

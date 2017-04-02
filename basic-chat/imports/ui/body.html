@@ -1,23 +1,23 @@
 <body>
   <div class="container">
     <header>
-      {{#if groupState}}
+      {{#if outGroup}}
         <h1>SaveMe</h1>
       {{/if}}
-      {{#if messageState}}
+      {{#if inGroup}}
         <h1>{{currentGroup}}</h1>
       {{/if}}
 
       {{> loginButtons}}
 
       {{#if currentUser}}
-        {{#if groupState}}
+        {{#if outGroup}}
           <form name="groupform">
             <input type="text" name="text" placeholder="Group Name" />
             <button class="submit-group">Submit</button>
           </form>
         {{/if}}
-        {{#if messageState}}
+        {{#if inGroup}}
           <form name="messageform">
             <input type="text" name="text" placeholder="Message" />
             <button class="submit-message">Submit</button>
@@ -26,19 +26,24 @@
           <form name="addmemberform">
             <input type="text" name="text" placeholder="Username to Add" />
             <button class="submit-member">Submit</button>
+						<button class="show-settings">Group Settings</button>
+						<button class="show-permissions">Group Permissions</button>
           </form>
         {{/if}}
       {{/if}}
     </header>
 
-    {{#if groupState}}
+    {{#if outGroup}}
       {{> grouplist}}
     {{/if}}
-    {{#if messageState}}
+    {{#if inGroup}}
       {{> messagelist}}
-    {{/if}}
-		{{#if messageState}}
-			{{> group_settings}}
+			{{#if groupSettingsOpen}}
+				{{> group_settings}}
+			{{/if}}
+			{{#if groupPermissionsOpen}}
+				{{> group_permissions}}
+			{{/if}}
 		{{/if}}
   </div>
 </body>

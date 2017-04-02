@@ -10,8 +10,11 @@ import './message.js'
 import './group.js'
 import './grouplist.js'
 import './messagelist.js'
+import './group_settings.js';
+import './group_permissions.js';
 import './body.html';
 import './group_settings.html';
+import './group_permissions.html';
 
 Template.body.onCreated(function bodyOnCreated(){
   this.state = new ReactiveDict();
@@ -20,17 +23,25 @@ Template.body.onCreated(function bodyOnCreated(){
 
 Template.body.helpers({
 
-  groupState(){
+  outGroup(){
     return Session.get("State") == "Groups";
   },
 
-  messageState(){
+  inGroup(){
     return Session.get("State") == "Messages";
   },
 
   currentGroup(){
     return Session.get("Group").groupname;
-  }
+  },
+
+  groupSettingsOpen(){
+    return Session.get("show_group_settings");
+  },
+
+  groupPermissionsOpen(){
+    return Session.get("show_group_permissions");
+  },
 
 });
 
@@ -98,6 +109,16 @@ Template.body.events({
   'click .show-groups'(event){
     event.preventDefault();
     Session.set("State","Groups");
+  },
+
+  'click .show-settings'(event){
+    event.preventDefault();
+    Session.set("show_group_settings",true);
+  },
+
+  'click .show-permissions'(event){
+    event.preventDefault();
+    Session.set("show_group_permissions",true);
   },
 
 });

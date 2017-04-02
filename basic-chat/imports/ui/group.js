@@ -26,12 +26,5 @@ Template.group.events({
     group = Groups.findOne({_id: this._id}, {});
     name = group.groupname;
     Session.set("Group",this);
-    alert(this._id);
   },
 });
-
-Template.group.helpers({
-  current_user_is_owner(){
-    return Groups.findOne({_id: Session.get("Group")._id}).owner == Meteor.userId();
-  }
-})
