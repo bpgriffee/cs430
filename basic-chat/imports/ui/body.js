@@ -11,6 +11,7 @@ import './group.js'
 import './grouplist.js'
 import './messagelist.js'
 import './body.html';
+import './group_settings.html';
 
 Template.body.onCreated(function bodyOnCreated(){
   this.state = new ReactiveDict();

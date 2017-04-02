@@ -8,13 +8,13 @@ import { Messages} from '../api/messages.js';
 import './group.html';
 
 Template.group.events({
-  'click .superdelete'(){
+  'click .delete'(){
       if (Groups.findOne({_id: this._id}).owner == Meteor.userId())
       {
         Groups.remove(this._id);
       }
   },
-  'click .delete'(){
+  'click .leave'(){
     Groups.update({_id: this._id}, {$pull: {users: Meteor.userId()}});
     if (Groups.findOne({_id: this._id}).users.length == 0)
     {
@@ -26,11 +26,12 @@ Template.group.events({
     group = Groups.findOne({_id: this._id}, {});
     name = group.groupname;
     Session.set("Group",this);
+    alert(this._id);
   },
 });
 
 Template.group.helpers({
   current_user_is_owner(){
-    return Groups.findOne({_id: this._id}).owner == Meteor.userId();
+    return Groups.findOne({_id: Session.get("Group")._id}).owner == Meteor.userId();
   }
 })
