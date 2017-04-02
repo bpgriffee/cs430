@@ -1,0 +1,42 @@
+<body>
+  <div class="container">
+    <header>
+      {{#if groupState}}
+        <h1>SaveMe</h1>
+      {{/if}}
+      {{#if messageState}}
+        <h1>{{currentGroup}}</h1>
+      {{/if}}
+
+      {{> loginButtons}}
+
+      {{#if currentUser}}
+        {{#if groupState}}
+          <form name="groupform">
+            <input type="text" name="text" placeholder="Group Name" />
+            <button class="submit-group">Submit</button>
+          </form>
+        {{/if}}
+        {{#if messageState}}
+          <form name="messageform">
+            <input type="text" name="text" placeholder="Message" />
+            <button class="submit-message">Submit</button>
+            <button class="show-groups">Back</button>
+          </form>
+          <form name="addmemberform">
+            <input type="text" name="text" placeholder="Username to Add" />
+            <button class="submit-member">Submit</button>
+          </form>
+        {{/if}}
+      {{/if}}
+    </header>
+
+    {{#if groupState}}
+      {{> grouplist}}
+    {{/if}}
+    {{#if messageState}}
+      {{> messagelist}}
+    {{/if}}
+
+  </div>
+</body>

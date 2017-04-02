@@ -1,0 +1,10 @@
+<template name="messagelist">
+  <ul>
+    {{#each messages}}
+      {{> message}}
+    {{/each}}
+    {{#each user in users}}
+      {{user}}
+    {{/each}}
+  </ul>
+</template>
