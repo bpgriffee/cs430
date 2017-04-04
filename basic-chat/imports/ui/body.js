@@ -43,6 +43,14 @@ Template.body.helpers({
     return Session.get("show_group_permissions");
   },
 
+  set_locations_required(){
+    document.getElementsByClassName("req-locations")[0].checked = Groups.findOne({_id: Session.get("Group")._id}).general_settings.req_locations;
+  },
+
+  set_emergency_access_required(){
+    document.getElementsByClassName("req-em-access")[0].checked = Groups.findOne({_id: Session.get("Group")._id}).general_settings.req_em_access;
+  }
+
 });
 
 Template.body.events({
@@ -57,11 +65,14 @@ Template.body.events({
     if(groupname.trim() != "")
     {
       // Insert a group into the Collection
-      Groups.insert({
+      group_id = Groups.insert({
         groupname,
         owner: Meteor.userId(),
-        users: [Meteor.userId()]
-      });
+        users: [Meteor.userId()],
+      })._id;
+
+      Groups.update({_id: group_id},{$set: {"general_settings.req_locations": false, "general_settings.req_em_access": false}});
+
       // Clear form
       target.value = '';
     }
@@ -114,11 +125,27 @@ Template.body.events({
   'click .show-settings'(event){
     event.preventDefault();
     Session.set("show_group_settings",true);
+    Session.set("show_group_permissions",false);
   },
 
   'click .show-permissions'(event){
     event.preventDefault();
     Session.set("show_group_permissions",true);
+    Session.set("show_group_settings",false);
   },
 
+  'click .login-buttons-logout'(event){
+    Session.set("show_group_permissions",false);
+    Session.set("show_group_settings",false);
+    Session.set("State","Groups");
+  }
+
+});
+
+Template.body.onRendered(function(){
+  Meteor.logout(function(){
+    Session.set("show_group_permissions",false);
+    Session.set("show_group_settings",false);
+    Session.set("State","Groups");
+  });
 });
