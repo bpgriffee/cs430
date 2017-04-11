@@ -9,8 +9,14 @@ import './group.html';
 
 Template.group.events({
   'click .delete'(){
+      if (Groups.findOne({_id: this._id}).owner == Meteor.userId())
+      {
+        Groups.remove(this._id);
+      }
+  },
+  'click .leave'(){
     Groups.update({_id: this._id}, {$pull: {users: Meteor.userId()}});
-    if (Groups.findOne({_id: this._id}.users.length == 0))
+    if (Groups.findOne({_id: this._id}).users.length == 0)
     {
       Groups.remove(this._id);
     }
@@ -21,4 +27,4 @@ Template.group.events({
     name = group.groupname;
     Session.set("Group",this);
   },
-})
+});

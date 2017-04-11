@@ -1,95 +1,97 @@
-<!--
-	Prologue by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
 <body>
-	<!-- Header -->
-		<div id="header">
+  <div class="container">
+    <header>
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">SaveMe</a>
+          </div>
+          <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="#">Home</a></li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                {{#if currentUser}}<li class="logoutbutton"><a>Logout</a></li>{{/if}}
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </header>
+    <div id="body">
+      <div class="container">
+        <div class="jumbotron">
+          {{#if outGroup}}
+            <h1>SaveMe</h1>
+          {{/if}}
+          {{#if inGroup}}
+            <h1>{{currentGroup}}<button class="show-groups btn btn-default pull-right">Back to groups</button></h1>
+          {{/if}}
 
-			<div class="top">
 
-				<!-- Logo -->
-					<div id="logo">
-            {{> loginButtons}}
-					</div>
-
-        <!-- Group Create -->
-          <div id="groupCreate">
-            {{#if currentUser}}
-              <form name="groupform">
-                <input type="text" name="text" placeholder="Group Name" />
-                <button class="submit-group">Submit</button>
+          {{#if currentUser}}
+            {{#if outGroup}}
+              <form class="form-group" name="groupform">
+                <h3>Create new group</h3>
+                <input class ="form-control" type="text" name="text" placeholder="Group Name" />
               </form>
+              <button class="btn btn-primary submit-group">Submit</button>
+              <div class="showGroups">
+                <h3>Or select a group to view messages</h3>
+                {{> grouplist}}
+              </div>
             {{/if}}
-          </div>
+            {{#if inGroup}}
+              <form class="form-group" name="addmemberform">
+                <h3>Add a user:</h3>
+                <div class="input-group">
+                  <input type="text" name="text" placeholder="Email to add" class="form-control"/>
+                  <span class="input-group-btn">
+                    <button class="submit-member btn btn-default" type="button">Add</button>
+                  </span>
+                </div>
 
-				<!-- Nav -->
-					<nav id="nav">
-						<!--
-							Prologue's nav expects links in one of two formats:
-							1. Hash link (scrolls to a different section within the page)
-							   <li><a href="#foobar" id="foobar-link" class="icon fa-whatever-icon-you-want skel-layers-ignoreHref"><span class="label">Foobar</span></a></li>
-							2. Standard link (sends the user to another page/site)
-							   <li><a href="http://foobar.tld" id="foobar-link" class="icon fa-whatever-icon-you-want"><span class="label">Foobar</span></a></li>
-						-->
-            {{> grouplist}}
-					</nav>
+                <!-- <input type="text" name="text" placeholder="Username to Add" />
+                <button class="submit-member">Submit</button> -->
+                <button class="show-settings btn btn-default">Group Settings</button>
+                <button class="show-permissions btn btn-default">Group Permissions</button>
+              </form>
+              <form class="form-group" name="messageform">
+                <h3>Type a message:</h3>
+                <div class="input-group">
+                  <input type="text" name="text" placeholder="Message" class="form-control"/>
+                  <span class="input-group-btn">
+                    <button class="submit-message btn btn-default" type="button">Send</button>
+                  </span>
+                </div>
+              </form>
+              {{> messagelist}}
+              {{#if groupSettingsOpen}}
+                {{> group_settings}}
+              {{/if}}
+              {{#if groupPermissionsOpen}}
+                {{> group_permissions}}
+              {{/if}}
+            {{/if}}
+          {{else}}
+            {{> atForm}}
 
-          <div class="bottom">
-            <li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-          </div>
+          {{/if}}
 
-			</div>
 
-			<div class="bottom">
 
-				<!-- Social Icons -->
-					<ul class="icons">
-						<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-						<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-						<li><a href="#" class="icon fa-github"><span class="label">Github</span></a></li>
-						<li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
-						<li><a href="#" class="icon fa-envelope"><span class="label">Email</span></a></li>
-					</ul>
 
-			</div>
-
-		</div>
-
-	<!-- Main -->
-		<div id="main">
-      {{#if messageState}}
-        <form name="messageform">
-          <input type="text" name="text" placeholder="Message" />
-          <button class="submit-message">Submit</button>
-          <button class="show-groups">Back</button>
-        </form>
-        <form name="addmemberform">
-          <input type="text" name="text" placeholder="Username to Add" />
-          <button class="submit-member">Submit</button>
-        </form>
-        {{> messagelist}}
-      {{/if}}
+        </div>
+      </div><!-- /.container -->
     </div>
+  </div>
 
-	<!-- Footer -->
-		<div id="footer">
-
-			<!-- Copyright -->
-				<ul class="copyright">
-					<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-				</ul>
-
-		</div>
-
-	<!-- Scripts -->
-		<script src="assets/js/jquery.min.js"></script>
-		<script src="assets/js/jquery.scrolly.min.js"></script>
-		<script src="assets/js/jquery.scrollzer.min.js"></script>
-		<script src="assets/js/skel.min.js"></script>
-		<script src="assets/js/util.js"></script>
-		<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
-		<script src="assets/js/main.js"></script>
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+  <script src="../../dist/js/bootstrap.min.js"></script>
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 
 </body>

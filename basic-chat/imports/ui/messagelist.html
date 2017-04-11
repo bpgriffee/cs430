@@ -1,10 +1,10 @@
 <template name="messagelist">
-  <ul>
+  <ul class="list-group">
     {{#each messages}}
       {{> message}}
     {{/each}}
     {{#each user in users}}
-      {{user}}
+      {{user.username}}
     {{/each}}
   </ul>
 </template>

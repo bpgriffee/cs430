@@ -10,7 +10,12 @@ import './message.js'
 import './group.js'
 import './grouplist.js'
 import './messagelist.js'
+import './group_settings.js';
+import './group_permissions.js';
 import './body.html';
+import './group_settings.html';
+import './group_permissions.html';
+import './login_form.html';
 
 Template.body.onCreated(function bodyOnCreated(){
   this.state = new ReactiveDict();
@@ -19,16 +24,32 @@ Template.body.onCreated(function bodyOnCreated(){
 
 Template.body.helpers({
 
-  groupState(){
+  outGroup(){
     return Session.get("State") == "Groups";
   },
 
-  messageState(){
+  inGroup(){
     return Session.get("State") == "Messages";
   },
 
   currentGroup(){
     return Session.get("Group").groupname;
+  },
+
+  groupSettingsOpen(){
+    return Session.get("show_group_settings");
+  },
+
+  groupPermissionsOpen(){
+    return Session.get("show_group_permissions");
+  },
+
+  set_locations_required(){
+    document.getElementsByClassName("req-locations")[0].checked = Groups.findOne({_id: Session.get("Group")._id}).general_settings.req_locations;
+  },
+
+  set_emergency_access_required(){
+    document.getElementsByClassName("req-em-access")[0].checked = Groups.findOne({_id: Session.get("Group")._id}).general_settings.req_em_access;
   }
 
 });
@@ -42,15 +63,20 @@ Template.body.events({
     // Get value from form element
     const target = document.groupform.text;
     const groupname = target.value;
+    if(groupname.trim() != "")
+    {
+      // Insert a group into the Collection
+      group_id = Groups.insert({
+        groupname,
+        owner: Meteor.userId(),
+        users: [Meteor.userId()],
+      })._id;
 
-    // Insert a group into the Collection
-    Groups.insert({
-      groupname,
-      owner: Meteor.userId(),
-      users: [Meteor.userId()]
-    });
-    // Clear form
-    target.value = '';
+      Groups.update({_id: group_id},{$set: {"general_settings.req_locations": false, "general_settings.req_em_access": false}});
+
+      // Clear form
+      target.value = '';
+    }
   },
 
   'click .submit-message'(event){
@@ -60,16 +86,18 @@ Template.body.events({
     // Get value from form element
     const target = document.messageform.text;
     const messagetext = target.value;
-
-    // Insert a message into the Collection
-    Messages.insert({
-      messagetext,
-      group: Session.get("Group")._id,
-      owner: Meteor.userId(),
-      username: Meteor.user().username,
-    });
-    // Clear form
-    target.value = '';
+    if(messagetext.trim() != "")
+    {
+      // Insert a message into the Collection
+      Messages.insert({
+        messagetext,
+        group: Session.get("Group")._id,
+        owner: Meteor.userId(),
+        username: Meteor.user().username,
+      });
+      // Clear form
+      target.value = '';
+    }
   },
 
   'click .submit-member'(event){
@@ -95,4 +123,32 @@ Template.body.events({
     Session.set("State","Groups");
   },
 
+  'click .show-settings'(event){
+    event.preventDefault();
+    Session.set("show_group_settings",true);
+    Session.set("show_group_permissions",false);
+  },
+
+  'click .show-permissions'(event){
+    event.preventDefault();
+    Session.set("show_group_permissions",true);
+    Session.set("show_group_settings",false);
+  },
+
+  'click .logoutbutton'(event){
+    event.preventDefault();
+    Meteor.logout();
+    // Clear all keys
+    Session.keys = {};
+    location.reload();
+  }
+
+});
+
+Template.body.onRendered(function(){
+  Meteor.logout(function(){
+    Session.set("show_group_permissions",false);
+    Session.set("show_group_settings",false);
+    Session.set("State","Groups");
+  });
 });

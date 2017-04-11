@@ -1,0 +1,15 @@
+<template name="group_settings">
+  <li>
+    <span class="text"><strong>Group Settings</strong></span><br/>
+    <checkbox class="mute">Mute (NF)</checkbox><br/>
+    <button class="leave-group">Leave Group (NF)</button><br/>
+    {{#if current_user_is_owner}}
+    <button class="add-admins">Add Admins (NF)</button><br/>
+    <input type="checkbox" class="req-locations"/>Locations (NF)<br/>
+    <input type="checkbox" class="req-em-access"/>Emergency Access (NF)<br/>
+    <button class="remove-user">Remove User (NF)</button><br/>
+    {{/if}}
+    <button class="save-settings">Save Settings (NF)</button><br/>
+    <button class="close-settings">Close Settings</button><br/>
+  </li>
+</template>
