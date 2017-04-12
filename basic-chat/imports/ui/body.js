@@ -20,6 +20,7 @@ import './login_form.html';
 Template.body.onCreated(function bodyOnCreated(){
   this.state = new ReactiveDict();
   Session.set("State","Groups");
+  Session.set("show_messages", true);
 });
 
 Template.body.helpers({
@@ -34,6 +35,14 @@ Template.body.helpers({
 
   currentGroup(){
     return Session.get("Group").groupname;
+  },
+
+  groupMessagesOpen(){
+    return Session.get("show_messages");
+  },
+
+  groupAddUserOpen(){
+    return Session.get("show_add_user");
   },
 
   groupSettingsOpen(){
@@ -121,18 +130,42 @@ Template.body.events({
   'click .show-groups'(event){
     event.preventDefault();
     Session.set("State","Groups");
+    Session.set("show_messages", true);
+    Session.set("show_add_user", false);
+    Session.set("show_group_permissions",false);
+    Session.set("show_group_settings",false);
+  },
+
+  'click .show-messages'(event){
+    event.preventDefault();
+    Session.set("show_messages", true);
+    Session.set("show_add_user", false);
+    Session.set("show_group_permissions",false);
+    Session.set("show_group_settings",false);
+  },
+
+  'click .show-add-user'(event){
+    event.preventDefault();
+    Session.set("show_messages", false);
+    Session.set("show_add_user", true);
+    Session.set("show_group_permissions",false);
+    Session.set("show_group_settings",false);
   },
 
   'click .show-settings'(event){
     event.preventDefault();
+    Session.set("show_messages", false);
+    Session.set("show_add_user", false)
     Session.set("show_group_settings",true);
     Session.set("show_group_permissions",false);
   },
 
   'click .show-permissions'(event){
     event.preventDefault();
-    Session.set("show_group_permissions",true);
+    Session.set("show_messages", false);
+    Session.set("show_add_user", false);
     Session.set("show_group_settings",false);
+    Session.set("show_group_permissions",true);
   },
 
   'click .logoutbutton'(event){
@@ -147,6 +180,8 @@ Template.body.events({
 
 Template.body.onRendered(function(){
   Meteor.logout(function(){
+    Session.set("show_messages", true);
+    Session.set("show_add_user", false);
     Session.set("show_group_permissions",false);
     Session.set("show_group_settings",false);
     Session.set("State","Groups");

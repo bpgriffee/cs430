@@ -9,6 +9,7 @@ Template.group_permissions.events({
   'click .close-permissions'(){
       event.preventDefault();
       Session.set("show_group_permissions",false);
+      Session.set("show_messages", true);
   },
 
   'click .save-permissions'(){

@@ -31,6 +31,7 @@ Template.group_settings.events({
   'click .close-settings'(){
       event.preventDefault();
       Session.set("show_group_settings",false);
+      Session.set("show_messages", true);
   },
   'click .save-settings'(){
       event.preventDefault();
