@@ -33,8 +33,10 @@
       {{/if}}
     </header>
 
+    {{#if currentUser}}
     {{#if outGroup}}
       {{> grouplist}}
+      {{> invite_list}}
     {{/if}}
     {{#if inGroup}}
       {{> messagelist}}
@@ -45,5 +47,6 @@
 				{{> group_permissions}}
 			{{/if}}
 		{{/if}}
+    {{/if}}
   </div>
 </body>

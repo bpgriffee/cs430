@@ -3,18 +3,22 @@ import { Template } from 'meteor/templating';
 import { ReactiveDict } from 'meteor/reactive-dict';
 import { Session } from 'meteor/session';
 
-import { Messages } from '../api/messages.js'
-import { Groups } from '../api/groups.js'
+import { Messages } from '../api/messages.js';
+import { Groups } from '../api/groups.js';
+import { Invites } from '../api/invites.js';
 
-import './message.js'
-import './group.js'
-import './grouplist.js'
-import './messagelist.js'
+import './group.js';
+import './invite.js';
+import './invite.html';
+import './grouplist.js';
+import './messagelist.js';
 import './group_settings.js';
 import './group_permissions.js';
 import './body.html';
 import './group_settings.html';
 import './group_permissions.html';
+import './invite_list.html';
+import './invite_list.js';
 
 Template.body.onCreated(function bodyOnCreated(){
   this.state = new ReactiveDict();
@@ -107,12 +111,10 @@ Template.body.events({
     const target = document.addmemberform.text;
     const usertext = target.value;
 
-    numusers = Meteor.users.find({username: usertext}).count();
-    if(numusers == 1)
-    {
-      group_id = Session.get("Group")._id;
-      Groups.update({_id: group_id},{$addToSet: {users: Meteor.users.findOne({username: usertext})._id}});
-    }
+    group_id = Session.get("Group")._id;
+    Groups.update({_id: group_id},{$addToSet: {users: Meteor.users.findOne({username: usertext})._id}});
+    var invite = {groupname: Groups.findOne({_id: group_id}).groupname, id: group_id};
+    Invites.update({_id: Meteor.userId()},{$addToSet: {groups: invite}});
     // Clear form
     target.value = '';
   },
@@ -132,20 +134,5 @@ Template.body.events({
     event.preventDefault();
     Session.set("show_group_permissions",true);
     Session.set("show_group_settings",false);
-  },
-
-  'click .login-buttons-logout'(event){
-    Session.set("show_group_permissions",false);
-    Session.set("show_group_settings",false);
-    Session.set("State","Groups");
   }
-
-});
-
-Template.body.onRendered(function(){
-  Meteor.logout(function(){
-    Session.set("show_group_permissions",false);
-    Session.set("show_group_settings",false);
-    Session.set("State","Groups");
-  });
 });
