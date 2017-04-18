@@ -1,52 +1,95 @@
 <body>
   <div class="container">
     <header>
-      {{#if outGroup}}
-        <h1>SaveMe</h1>
-      {{/if}}
-      {{#if inGroup}}
-        <h1>{{currentGroup}}</h1>
-      {{/if}}
-
-      {{> loginButtons}}
-
-      {{#if currentUser}}
-        {{#if outGroup}}
-          <form name="groupform">
-            <input type="text" name="text" placeholder="Group Name" />
-            <button class="submit-group">Submit</button>
-          </form>
-        {{/if}}
-        {{#if inGroup}}
-          <form name="messageform">
-            <input type="text" name="text" placeholder="Message" />
-            <button class="submit-message">Submit</button>
-            <button class="show-groups">Back</button>
-          </form>
-          <form name="addmemberform">
-            <input type="text" name="text" placeholder="Username to Add" />
-            <button class="submit-member">Submit</button>
-						<button class="show-settings">Group Settings</button>
-						<button class="show-permissions">Group Permissions</button>
-          </form>
-        {{/if}}
-      {{/if}}
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">SaveMe</a>
+          </div>
+          <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="#">Home</a></li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                {{#if currentUser}}<li class="logoutbutton"><a>Logout</a></li>{{/if}}
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
     </header>
+    <div id="body">
+      <div class="container">
+        <div class="jumbotron">
+          {{#if outGroup}}
+            <h1>SaveMe</h1>
+          {{/if}}
+          {{#if inGroup}}
+            <h1>{{currentGroup}}<button class="show-groups btn btn-primary pull-right">Back to groups</button></h1>
+          {{/if}}
 
-    {{#if currentUser}}
-    {{#if outGroup}}
-      {{> grouplist}}
-      {{> invite_list}}
-    {{/if}}
-    {{#if inGroup}}
-      {{> messagelist}}
-			{{#if groupSettingsOpen}}
-				{{> group_settings}}
-			{{/if}}
-			{{#if groupPermissionsOpen}}
-				{{> group_permissions}}
-			{{/if}}
-		{{/if}}
-    {{/if}}
+          {{#if currentUser}}
+            {{#if outGroup}}
+              <form class="form-group" name="groupform">
+                <h3>Create new group</h3>
+                <input class ="form-control" type="text" name="text" placeholder="Group Name" />
+              </form>
+              <button class="btn btn-primary submit-group">Submit</button>
+              <div class="showGroups">
+                <h3>Or select a group to view messages</h3>
+                {{> grouplist}}
+              </div>
+            {{/if}}
+            {{#if inGroup}}
+              <button class="show-messages btn btn-primary">Show Messages</button>
+              <button class="show-add-user btn btn-default">Add User</button>
+              <button class="show-settings btn btn-default">Group Settings</button>
+              <button class="show-permissions btn btn-default">Group Permissions</button>
+              {{#if groupAddUserOpen}}
+                <form class="form-group" name="addmemberform">
+                  <h3>Add a user:</h3>
+                  <div class="input-group">
+                    <input type="text" name="text" placeholder="Username to add" class="form-control"/>
+                    <span class="input-group-btn">
+                      <button class="submit-member btn btn-default" type="submit">Add</button>
+                    </span>
+                  </div>
+                </form>
+              {{else if groupSettingsOpen}}
+                {{> group_settings}}
+              {{else if groupPermissionsOpen}}
+                {{> group_permissions}}
+              {{else if groupMessagesOpen}}
+                <form class="form-group" name="messageform">
+                  <h3>Type a message:</h3>
+                  <div class="input-group">
+                    <input type="text" name="text" placeholder="Message" class="form-control"/>
+                    <span class="input-group-btn">
+                      <button class="submit-message btn btn-default" type="submit">Send</button>
+                    </span>
+                  </div>
+                </form>
+                {{> messagelist}}
+              {{/if}}
+            {{/if}}
+          {{else}}
+            {{> atForm}}
+          {{/if}}
+
+
+
+
+        </div>
+      </div><!-- /.container -->
+    </div>
   </div>
+
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+  <script src="../../dist/js/bootstrap.min.js"></script>
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
 </body>
