@@ -1,0 +1,8 @@
+<template name="userlist">
+  <h3>Group Users</h3>
+  <ul class="list-group">
+    {{#each user in users}}
+      {{> userentry}}
+    {{/each}}
+  </ul>
+</template>
