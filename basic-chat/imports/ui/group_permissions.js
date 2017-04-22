@@ -20,6 +20,7 @@ Template.group_permissions.events({
       Groups.update({_id: Session.get("Group")._id}, { $pull: { users_permissions: { user_id: Meteor.userId() } } });
       Groups.update({_id: Session.get("Group")._id},{$addToSet: {users_permissions: curr_permission}});
       Session.set("show_group_permissions",false);
+      Session.set("show_messages", true);
   }
 });
 
