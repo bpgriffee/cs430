@@ -40,11 +40,20 @@
               </div>
             {{/if}}
             {{#if inGroup}}
-              <button class="show-messages btn btn-primary">Show Messages</button>
-              <button class="show-add-user btn btn-default">Add User</button>
-              <button class="show-settings btn btn-default">Group Settings</button>
-              <button class="show-permissions btn btn-default">Group Permissions</button>
-              <button class="show-users btn btn-default">Show Users</button>
+              <div class="btn-group">
+                <button class="show-messages btn btn-primary">Show Messages</button>
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li class=show-add-user><a>Add User</a></li>
+                  <li class="show-settings"><a>Group Settings</a></li>
+                  <li class="show-permissions"><a>Group Permissions</a></li>
+                  <li class="show-users"><a>Show Users</a></li>
+                </ul>
+
+              </div>
               {{#if groupAddUserOpen}}
                 <form class="form-group" name="addmemberform">
                   <h3>Add a user:</h3>
