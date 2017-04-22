@@ -3,8 +3,8 @@ import { Session } from 'meteor/session';
 import { Meteor } from 'meteor/meteor';
 import { Groups } from '../api/groups.js';
 
-import './userentry.js';
-import './userentry.html';
+import './user.js';
+import './user.html';
 import './userlist.html';
 
 Template.userlist.helpers({

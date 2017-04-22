@@ -1,9 +1,9 @@
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
 
-import './userentry.html';
+import './user.html';
 
-Template.userentry.events({
+Template.user.events({
   'click .get-location'(){
   },
 })

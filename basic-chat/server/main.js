@@ -6,5 +6,6 @@ import '../imports/api/invites.js';
 
 Accounts.onCreateUser((options, user) => {
   user.username = user.emails[0].address;
+  user.groups = [];
   return user;
 });
