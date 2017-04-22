@@ -17,8 +17,6 @@ Template.group_permissions.events({
       var perm_loc_checked = document.getElementsByClassName("permit-locations")[0].checked;
       var perm_em_access_checked = document.getElementsByClassName("permit-em-access")[0].checked;
       var curr_permission = {user_id: Meteor.userId(), permit_locations: perm_loc_checked, permit_em_access: perm_em_access_checked};
-      alert(curr_permission.permit_locations);
-      alert(curr_permission.permit_em_access);
       Groups.update({_id: Session.get("Group")._id}, { $pull: { users_permissions: { user_id: Meteor.userId() } } });
       Groups.update({_id: Session.get("Group")._id},{$addToSet: {users_permissions: curr_permission}});
       Session.set("show_group_permissions",false);
@@ -30,8 +28,6 @@ function set_checkboxes(){
   if(permissions_set == null) return;
   var permission = current_user_permissions(permissions_set);
   if(permission == null) return;
-  alert(permission.permit_locations);
-  alert(permission.permit_em_access);
   document.getElementsByClassName("permit-locations")[0].checked = permission.permit_locations;
   document.getElementsByClassName("permit-em-access")[0].checked = permission.permit_em_access;
 }

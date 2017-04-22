@@ -6,7 +6,7 @@ import { Messages } from '../api/messages.js';
 import { Groups } from '../api/groups.js';
 import { Invites } from '../api/invites.js';
 
-import './message.js'
+import './message.js';
 import './group.js';
 import './invite.js';
 import './invite.html';
@@ -15,12 +15,14 @@ import './messagelist.js';
 import './group_settings.js';
 import './group_permissions.js';
 import './group_settings.js';
-import './group_permissions.js';
+import './userlist.js';
+
 import './body.html';
 import './group_settings.html';
 import './group_permissions.html';
 import './login_form.html';
 import './invite_list.html';
+import './userlist.html';
 import './invite_list.js';
 
 Template.body.onCreated(function bodyOnCreated(){
@@ -57,6 +59,10 @@ Template.body.helpers({
 
   groupPermissionsOpen(){
     return Session.get("show_group_permissions");
+  },
+
+  groupUsersOpen(){
+    return Session.get("show_users");
   },
 
   set_locations_required(){
@@ -138,6 +144,7 @@ Template.body.events({
     Session.set("show_add_user", false);
     Session.set("show_group_permissions",false);
     Session.set("show_group_settings",false);
+    Session.set("show_users", false);
   },
 
   'click .show-messages'(event){
@@ -146,6 +153,7 @@ Template.body.events({
     Session.set("show_add_user", false);
     Session.set("show_group_permissions",false);
     Session.set("show_group_settings",false);
+    Session.set("show_users", false);
   },
 
   'click .show-add-user'(event){
@@ -154,6 +162,7 @@ Template.body.events({
     Session.set("show_add_user", true);
     Session.set("show_group_permissions",false);
     Session.set("show_group_settings",false);
+    Session.set("show_users", false);
   },
 
   'click .show-settings'(event){
@@ -162,6 +171,7 @@ Template.body.events({
     Session.set("show_add_user", false)
     Session.set("show_group_settings",true);
     Session.set("show_group_permissions",false);
+    Session.set("show_users", false);
   },
 
   'click .show-permissions'(event){
@@ -170,6 +180,16 @@ Template.body.events({
     Session.set("show_add_user", false);
     Session.set("show_group_settings",false);
     Session.set("show_group_permissions",true);
+    Session.set("show_users", false);
+  },
+
+  'click .show-users'(event){
+    event.preventDefault();
+    Session.set("show_messages", false);
+    Session.set("show_add_user", false);
+    Session.set("show_group_settings",false);
+    Session.set("show_group_permissions",false);
+    Session.set("show_users", true);
   },
 
   'click .logoutbutton'(event){
