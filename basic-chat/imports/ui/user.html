@@ -1,9 +1,11 @@
 <template name="user">
   <li class="list-group-item">
     <span class="text"><strong>{{username}}</strong></span>
-    {{#if current_user_is_owner}}
+    {{#if remove_user_permitted}}
         <button class="remove-user btn-mini btn-danger pull-right">Remove User</button>
     {{/if}}
+    {{#if check_locations_permitted}}
     <button class="get-location btn-mini btn-info pull-right">Get Location</button>
+    {{/if}}
   </li>
 </template>
