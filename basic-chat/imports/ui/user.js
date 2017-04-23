@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
 import { Groups } from '../api/groups.js';
+import { Geolocation } from 'meteor/mdg:geolocation';
 
 import './user.html';
 
@@ -28,7 +29,7 @@ Template.user.events({
   },
   'click .remove-user'(){
         Groups.update({_id: Session.get("Group")._id}, {$pull: {users: this._id}});
-  },
+  }
 });
 
 function current_group_locations_required(){
