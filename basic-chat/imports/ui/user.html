@@ -1,7 +1,9 @@
 <template name="user">
   <li class="list-group-item">
     <span class="text"><strong>{{username}}</strong></span>
-    <button class="remove-user btn-mini btn-danger pull-right">Remove User (NF)</button>
+    {{#if current_user_is_owner}}
+        <button class="remove-user btn-mini btn-danger pull-right">Remove User</button>
+    {{/if}}
     <button class="get-location btn-mini btn-info pull-right">Get Location</button>
   </li>
 </template>

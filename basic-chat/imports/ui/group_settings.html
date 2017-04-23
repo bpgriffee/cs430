@@ -1,7 +1,7 @@
 <template name="group_settings">
   <h3>Group Settings</h3>
-  <div class="checkbox"><input type="checkbox" class="mute"/>Mute (NF)</div>
-  <button class="leave-group btn btn-warning">Leave Group (NF)</button>
+  <div class="checkbox"><input type="checkbox" class="mute"/>Mute</div>
+  <button class="leave-group btn btn-warning">Leave Group</button>
   {{#if current_user_is_owner}}
     <h3>Admin Area</h3>
     <!-- <button class="add-admins btn btn-default">Add Admins (NF)</button><br/> -->
@@ -10,6 +10,6 @@
     <button class="delete btn btn-danger">Delete Group</button>
   {{/if}}
   <hr class="divider">
-  <button class="save-settings btn btn-success">Save Settings (NF)</button>
+  <button class="save-settings btn btn-success">Save Settings</button>
   <button class="close-settings btn btn-danger">Close Settings</button>
 </template>
