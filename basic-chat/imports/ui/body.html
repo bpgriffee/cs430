@@ -31,9 +31,13 @@
             {{#if outGroup}}
               <form class="form-group" name="groupform">
                 <h3>Create new group</h3>
-                <input class ="form-control" type="text" name="text" placeholder="Group Name" />
+                <div class="input-group">
+                  <input type="text" name="text" placeholder="Group Name" class="form-control"/>
+                  <span class="input-group-btn">
+                    <button class="submit-group btn btn-default" type="submit">Submit</button>
+                  </span>
+                </div>
               </form>
-              <button class="btn btn-primary submit-group">Submit</button>
               <div class="showGroups">
                 <h3>Or select a group to view messages</h3>
                 {{> grouplist}}

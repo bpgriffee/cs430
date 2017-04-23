@@ -25,6 +25,7 @@ Template.user.helpers({
 
 Template.user.events({
   'click .get-location'(){
+    Session.set("user_to_get", this._id);
     Session.set("show_messages", false);
     Session.set("show_add_user", false);
     Session.set("show_group_settings",false);

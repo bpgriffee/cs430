@@ -38,13 +38,11 @@ Template.group_permissions.helpers({
 
 Template.group_permissions.events({
   'click .close-permissions'(){
-      event.preventDefault();
       Session.set("show_group_permissions",false);
       Session.set("show_messages", true);
   },
 
   'click .save-permissions'(){
-      event.preventDefault();
       var locations_box = document.getElementsByClassName("permit-locations")[0];
       var em_access_box = document.getElementsByClassName("permit-em-access")[0];
       var perm_loc_checked = (locations_box == null ? null : locations_box.checked);
