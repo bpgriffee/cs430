@@ -5,6 +5,37 @@ import { Groups } from '../api/groups.js'
 
 import './group_permissions.html';
 
+Template.group_permissions.helpers({
+
+  locations_required(){
+    var group = Groups.findOne({_id: Session.get("Group")._id});
+    if(group == null) return false;
+    if(group.general_settings == null) return false;
+    if(group.general_settings.req_locations == null) return false;
+    return group.general_settings.req_locations;
+  },
+  emergency_access_required(){
+    var group = Groups.findOne({_id: Session.get("Group")._id});
+    if(group == null) return false;
+    if(group.general_settings == null) return false;
+    if(group.general_settings.req_em_access == null) return false;
+    return group.general_settings.req_em_access;
+  },
+  options_exist(){
+    var group = Groups.findOne({_id: Session.get("Group")._id});
+    if(group == null) return true;
+    if(group.general_settings == null) return true;
+    var em = group.general_settings.req_em_access;
+    var loc = group.general_settings.req_locations;
+    alert("Em = " + em);
+    alert("Loc = " + loc);
+    if(em == null) em = false;
+    if(loc == null) loc = false;
+    return !(em && loc);
+  },
+
+});
+
 Template.group_permissions.events({
   'click .close-permissions'(){
       event.preventDefault();
@@ -14,8 +45,10 @@ Template.group_permissions.events({
 
   'click .save-permissions'(){
       event.preventDefault();
-      var perm_loc_checked = document.getElementsByClassName("permit-locations")[0].checked;
-      var perm_em_access_checked = document.getElementsByClassName("permit-em-access")[0].checked;
+      var locations_box = document.getElementsByClassName("permit-locations")[0];
+      var em_access_box = document.getElementsByClassName("permit-em-access")[0];
+      var perm_loc_checked = (locations_box == null ? null : locations_box.checked);
+      var perm_em_access_checked = (em_access_box == null ? null : em_access_box.checked);
       var curr_permission = {user_id: Meteor.userId(), permit_locations: perm_loc_checked, permit_em_access: perm_em_access_checked};
       Groups.update({_id: Session.get("Group")._id}, { $pull: { users_permissions: { user_id: Meteor.userId() } } });
       Groups.update({_id: Session.get("Group")._id},{$addToSet: {users_permissions: curr_permission}});
@@ -29,8 +62,10 @@ function set_checkboxes(){
   if(permissions_set == null) return;
   var permission = current_user_permissions(permissions_set);
   if(permission == null) return;
-  document.getElementsByClassName("permit-locations")[0].checked = permission.permit_locations;
-  document.getElementsByClassName("permit-em-access")[0].checked = permission.permit_em_access;
+  var loc_box = document.getElementsByClassName("permit-locations")[0];
+  var em_box = document.getElementsByClassName("permit-em-access")[0];
+  if(loc_box != null) document.getElementsByClassName("permit-locations")[0].checked = permission.permit_locations;
+  if(em_box != null) document.getElementsByClassName("permit-em-access")[0].checked = permission.permit_em_access;
 }
 
 function current_user_permissions(permissions){

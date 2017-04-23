@@ -2,7 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
 import { Groups } from '../api/groups.js';
-import { Users } from '../api/myusers.js';
 
 import './group_settings.html';
 
@@ -12,7 +11,6 @@ Template.group_settings.helpers({
     return Session.get("Group").owner == Meteor.userId();
   },
   locations_required(){
-    //return Groups.findOne({_id: Session.get("Group")._id}).general_settings.req_locations == "true";
     if(Groups.findOne({_id: Session.get("Group")._id}).general_settings.req_locations) return "checked";
     return "";
   },
@@ -26,10 +24,6 @@ function set_checkboxes(){
   if(mutes != null && current_user_mute_status(mutes) != null) document.getElementsByClassName("mute")[0].checked = current_user_mute_status(mutes).muted;
 
   var curr_group = Groups.findOne({_id: Session.get("Group")._id});
-  //var muted_list = Meteor.user().profile[0].muted;
-  //var muted_list = Users.find({_id: Meteor.userId()}).muted;
-  //var searchentry = {group_id: Session.get("Group")._id};
-  //document.getElementsByClassName("mute")[0].checked = (muted_list != null && muted_list.indexOf(searchentry) != -1);
   if(curr_group == null ||  curr_group.general_settings == null || curr_group.general_settings.req_locations == null || curr_group.general_settings.req_em_access == null) return null;
   document.getElementsByClassName("req-locations")[0].checked = curr_group.general_settings.req_locations;
   document.getElementsByClassName("req-em-access")[0].checked = curr_group.general_settings.req_em_access;
@@ -45,6 +39,18 @@ function current_user_mute_status(users_muted){
 }
 
 Template.group_settings.events({
+  'click .delete'(){
+      if (Groups.findOne({_id: Session.get("Group")._id}).owner == Meteor.userId())
+      {
+        Groups.remove(Session.get("Group")._id);
+      }
+      Session.set("State","Groups");
+      Session.set("show_messages", true);
+      Session.set("show_add_user", false);
+      Session.set("show_group_permissions",false);
+      Session.set("show_group_settings",false);
+      Session.set("show_users", false);
+  },
   'click .close-settings'(){
       event.preventDefault();
       Session.set("show_group_settings",false);
@@ -54,13 +60,25 @@ Template.group_settings.events({
       var user_id = Meteor.userId();
       event.preventDefault();
       Groups.update({_id: Session.get("Group")._id},{$set: {"general_settings.req_locations": document.getElementsByClassName("req-locations")[0].checked, "general_settings.req_em_access": document.getElementsByClassName("req-em-access")[0].checked}});
-      //Users.update({_id: user_id},{$pull: {muted: {group_id: Session.get("Group")._id}}});
       var curr_mute_status = {user_id: Meteor.userId(), muted: document.getElementsByClassName("mute")[0].checked}
       Groups.update({_id: Session.get("Group")._id}, { $pull: { users_muted: { user_id: Meteor.userId()}}});
       Groups.update({_id: Session.get("Group")._id},{$addToSet: {users_muted: curr_mute_status}});
       alert(current_user_mute_status(Groups.findOne({_id: Session.get("Group")._id}).users_muted).muted);
       Session.set("show_group_settings",false);
       Session.set("show_messages", true);
+  },
+  'click .leave-group'(){
+      Groups.update({_id: Session.get("Group")._id}, {$pull: {users: Meteor.userId()}});
+      if (Groups.findOne({_id: Session.get("Group")._id}).users.length == 0)
+      {
+        Groups.remove(Session.get("Group")._id);
+      }
+      Session.set("State","Groups");
+      Session.set("show_messages", true);
+      Session.set("show_add_user", false);
+      Session.set("show_group_permissions",false);
+      Session.set("show_group_settings",false);
+      Session.set("show_users", false);
   }
 });
 
