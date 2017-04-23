@@ -16,6 +16,8 @@ import './group_settings.js';
 import './group_permissions.js';
 import './group_settings.js';
 import './userlist.js';
+import './map.js';
+import './invite_list.js';
 
 import './body.html';
 import './group_settings.html';
@@ -23,7 +25,8 @@ import './group_permissions.html';
 import './login_form.html';
 import './invite_list.html';
 import './userlist.html';
-import './invite_list.js';
+import './map.html'
+
 
 Template.body.onCreated(function bodyOnCreated(){
   this.state = new ReactiveDict();
@@ -63,6 +66,10 @@ Template.body.helpers({
 
   groupUsersOpen(){
     return Session.get("show_users");
+  },
+
+  mapIsOpen(){
+    return Session.get("show_map");
   },
 
   set_locations_required(){
@@ -145,6 +152,7 @@ Template.body.events({
     Session.set("show_group_permissions",false);
     Session.set("show_group_settings",false);
     Session.set("show_users", false);
+    Session.set("show_map", false)
   },
 
   'click .show-messages'(event){
@@ -154,6 +162,7 @@ Template.body.events({
     Session.set("show_group_permissions",false);
     Session.set("show_group_settings",false);
     Session.set("show_users", false);
+    Session.set("show_map", false)
   },
 
   'click .show-add-user'(event){
@@ -163,6 +172,7 @@ Template.body.events({
     Session.set("show_group_permissions",false);
     Session.set("show_group_settings",false);
     Session.set("show_users", false);
+    Session.set("show_map", false)
   },
 
   'click .show-settings'(event){
@@ -172,6 +182,7 @@ Template.body.events({
     Session.set("show_group_settings",true);
     Session.set("show_group_permissions",false);
     Session.set("show_users", false);
+    Session.set("show_map", false)
   },
 
   'click .show-permissions'(event){
@@ -181,6 +192,7 @@ Template.body.events({
     Session.set("show_group_settings",false);
     Session.set("show_group_permissions",true);
     Session.set("show_users", false);
+    Session.set("show_map", false)
   },
 
   'click .show-users'(event){
@@ -190,6 +202,7 @@ Template.body.events({
     Session.set("show_group_settings",false);
     Session.set("show_group_permissions",false);
     Session.set("show_users", true);
+    Session.set("show_map", false);
   },
 
   'click .logoutbutton'(event){

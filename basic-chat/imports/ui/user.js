@@ -13,8 +13,14 @@ Template.user.helpers({
 
 Template.user.events({
   'click .get-location'(){
+    Session.set("show_messages", false);
+    Session.set("show_add_user", false);
+    Session.set("show_group_settings",false);
+    Session.set("show_group_permissions",false);
+    Session.set("show_users", false);
+    Session.set("show_map", true);
   },
   'click .remove-user'(){
-        Groups.update({_id: Session.get("Group")._id}, {$pull: {users: this._id}});
+    Groups.update({_id: Session.get("Group")._id}, {$pull: {users: this._id}});
   },
 })
