@@ -1,7 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
 import { Groups } from '../api/groups.js';
-import { Geolocation } from 'meteor/mdg:geolocation';
 
 import './user.html';
 

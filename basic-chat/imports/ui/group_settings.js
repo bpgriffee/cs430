@@ -2,6 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
 import { Groups } from '../api/groups.js';
+import { Geolocation } from 'meteor/mdg:geolocation';
+import { Locations } from '../api/locations.js';
 
 import './group_settings.html';
 
@@ -79,6 +81,16 @@ Template.group_settings.events({
       Session.set("show_group_permissions",false);
       Session.set("show_group_settings",false);
       Session.set("show_users", false);
+  },
+  'click .set-location'(){
+      var loc = Geolocation.latLng();
+      if(loc == null) loc = Geolocation.latLng();
+      if(loc == null)
+      {
+        alert("Could not get location.");
+        return;
+      }
+      Locations.insert({_id: Meteor.userId(), lat: loc.lat, long: loc.lng});
   }
 });
 
