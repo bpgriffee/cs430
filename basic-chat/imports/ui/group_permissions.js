@@ -27,8 +27,6 @@ Template.group_permissions.helpers({
     if(group.general_settings == null) return true;
     var em = group.general_settings.req_em_access;
     var loc = group.general_settings.req_locations;
-    alert("Em = " + em);
-    alert("Loc = " + loc);
     if(em == null) em = false;
     if(loc == null) loc = false;
     return !(em && loc);

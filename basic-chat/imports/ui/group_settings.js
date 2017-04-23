@@ -63,7 +63,6 @@ Template.group_settings.events({
       var curr_mute_status = {user_id: Meteor.userId(), muted: document.getElementsByClassName("mute")[0].checked}
       Groups.update({_id: Session.get("Group")._id}, { $pull: { users_muted: { user_id: Meteor.userId()}}});
       Groups.update({_id: Session.get("Group")._id},{$addToSet: {users_muted: curr_mute_status}});
-      alert(current_user_mute_status(Groups.findOne({_id: Session.get("Group")._id}).users_muted).muted);
       Session.set("show_group_settings",false);
       Session.set("show_messages", true);
   },
@@ -88,6 +87,7 @@ Template.group_settings.events({
         alert("Could not get location.");
         return;
       }
+      Locations.remove({_id: Meteor.userId()});
       Locations.insert({_id: Meteor.userId(), lat: loc.lat, long: loc.lng});
   }
 });

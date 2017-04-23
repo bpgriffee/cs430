@@ -5,6 +5,7 @@ import { Session } from 'meteor/session';
 import { Messages } from '../api/messages.js';
 import { Groups } from '../api/groups.js';
 import { Invites } from '../api/invites.js';
+import { Geolocation } from 'meteor/mdg:geolocation';
 
 import './message.js';
 import './group.js';
@@ -215,7 +216,9 @@ Template.body.events({
 
 });
 
-Template.body.onRendered(function(){
+Template.body.onRendered(
+  Geolocation.currentLocation(),
+  function(){
   Meteor.logout(function(){
     Session.set("show_messages", true);
     Session.set("show_add_user", false);
