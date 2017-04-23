@@ -17,12 +17,10 @@ Template.map.events({
 function initMap() {
   var GoogleMapsLoader = require('google-maps'); // only for common js environments
   var map;
-  var mynewlat = Locations.findOne({_id: Session.get("user_to_get").lat});
-  var mylat = 39.643217;
-  var mynewlng = Locations.findOne({_id: Session.get("user_to_get").long});
-  var mylng = -79.960964;
-  alert(mynewlat);
-  alert(mynewlng);
+  var mylat = Locations.findOne({_id: Session.get("user_to_get")}).lat;
+  // var mylat = 39.643217;
+  var mylng = Locations.findOne({_id: Session.get("user_to_get")}).long;
+  // var mylng = -79.960964;
   GoogleMapsLoader.KEY = 'AIzaSyBhoQ8_9JlgO88J83OB4BJzxBGhIBV8opM&v=3.exp&';
   GoogleMapsLoader.load(function(google) {
     map = new google.maps.Map(document.getElementById('map'), {
