@@ -221,9 +221,7 @@ Template.body.events({
     {
       var broadcast = false;
       var curr_group = groups_containing_user[group_index];
-      alert(curr_group.groupname);
       var curr_group_permissions = curr_group.users_permissions;
-      alert(curr_group.general_settings);
       var curr_group_curr_user_permissions = current_user_permissions(curr_group_permissions);
       if(curr_group.general_settings != null && curr_group.general_settings.req_em_access != null && curr_group.general_settings.req_em_access) broadcast = true;
       else if(curr_group_curr_user_permissions != null && curr_group_curr_user_permissions.permit_em_access) broadcast = true;
@@ -237,7 +235,6 @@ Template.body.events({
           owner: Meteor.userId(),
           username: Meteor.user().username,
         });
-        alert("Posted in " + curr_group.groupname);
       }
     }
   }
