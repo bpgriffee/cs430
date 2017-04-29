@@ -215,24 +215,29 @@ Template.body.events({
   },
 
   'click .emergency-broadcast'(event){
-    var groups_containing_user = Groups.find({users: {$in: [Meteor.userId()]}});
-    for(curr_group in groups_containing_user)
+    var groups_containing_user = Groups.find({users: {$in: [Meteor.userId()]}}).fetch();
+    var len = groups_containing_user.length;
+    for(group_index in groups_containing_user)
     {
       var broadcast = false;
+      var curr_group = groups_containing_user[group_index];
+      alert(curr_group.groupname);
       var curr_group_permissions = curr_group.users_permissions;
+      alert(curr_group.general_settings);
       var curr_group_curr_user_permissions = current_user_permissions(curr_group_permissions);
-      if((curr_group.general_settings == null || curr_group.general_settings.req_locations == null) && curr_group_curr_user_permissions != null) broadcast = curr_group_curr_user_permissions.permit_locations;
-      else if(curr_group.general_settings != null) broadcast = curr_group.general_settings.req_locations;
-      if(broadcast == null) continue;
+      if(curr_group.general_settings != null && curr_group.general_settings.req_em_access != null && curr_group.general_settings.req_em_access) broadcast = true;
+      else if(curr_group_curr_user_permissions != null && curr_group_curr_user_permissions.permit_em_access) broadcast = true;
+      else broadcast = false;
       if(broadcast)
       {
         var em_message = "EMERGENCY BROADCAST: I need help. Check my location.";
         Messages.insert({
-          message: em_message,
+          messagetext: em_message,
           group: curr_group._id,
           owner: Meteor.userId(),
           username: Meteor.user().username,
         });
+        alert("Posted in " + curr_group.groupname);
       }
     }
   }
