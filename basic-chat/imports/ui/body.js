@@ -79,6 +79,27 @@ Template.body.helpers({
 
   set_emergency_access_required(){
     document.getElementsByClassName("req-em-access")[0].checked = Groups.findOne({_id: Session.get("Group")._id}).general_settings.req_em_access;
+  },
+
+  emergency_broadcast_possible(){
+    var groups_containing_user = Groups.find({users: {$in: [Meteor.userId()]}}).fetch();
+    var len = groups_containing_user.length;
+    if(len == 0) return false;
+    for(group_index in groups_containing_user)
+    {
+      var broadcast = false;
+      var curr_group = groups_containing_user[group_index];
+      var curr_group_permissions = curr_group.users_permissions;
+      var curr_group_curr_user_permissions = current_user_permissions(curr_group_permissions);
+      if(curr_group.general_settings != null && curr_group.general_settings.req_em_access != null && curr_group.general_settings.req_em_access) broadcast = true;
+      else if(curr_group_curr_user_permissions != null && curr_group_curr_user_permissions.permit_em_access) broadcast = true;
+      else broadcast = false;
+      if(broadcast)
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
 });

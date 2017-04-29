@@ -42,7 +42,9 @@
                 <h3>Or select a group to view messages</h3>
                 {{> grouplist}}
               </div>
+                {{#if emergency_broadcast_possible}}
                 <button class="btn btn-default emergency-broadcast" type="submit">Emergency Broadcast</button>
+                {{/if}}
             {{/if}}
             {{#if inGroup}}
               <div class="btn-group">
