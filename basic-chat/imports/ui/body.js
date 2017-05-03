@@ -5,6 +5,7 @@ import { Session } from 'meteor/session';
 import { Messages } from '../api/messages.js';
 import { Groups } from '../api/groups.js';
 import { Invites } from '../api/invites.js';
+import { Locations } from '../api/locations.js';
 import { Geolocation } from 'meteor/mdg:geolocation';
 
 import './message.js';
@@ -249,13 +250,22 @@ Template.body.events({
       else broadcast = false;
       if(broadcast)
       {
-        var em_message = "EMERGENCY BROADCAST: I need help. Check my location.";
+        var em_message = "EMERGENCY BROADCAST: I need help.";
         Messages.insert({
           messagetext: em_message,
           group: curr_group._id,
           owner: Meteor.userId(),
           username: Meteor.user().username,
         });
+        var loc = Geolocation.latLng();
+        if(loc == null) loc = Geolocation.latLng();
+        if(loc == null)
+        {
+          alert("Could not get location. Check whether your browser has location settings permitted.");
+          return;
+        }
+        Locations.remove({_id: Meteor.userId()});
+        Locations.insert({_id: Meteor.userId(), lat: loc.lat, long: loc.lng});
       }
     }
   }

@@ -84,7 +84,7 @@ Template.group_settings.events({
       if(loc == null) loc = Geolocation.latLng();
       if(loc == null)
       {
-        alert("Could not get location.");
+        alert("Could not get location. Check whether your browser has location settings permitted.");
         return;
       }
       Locations.remove({_id: Meteor.userId()});
